@@ -2,68 +2,68 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 
 <body>
-	<script>
-		const { searchParams } = new URL(window.location.href);
-		const liffId = searchParams.get("liff_id");
+  <script>
+    const { searchParams } = new URL(window.location.href);
+    const liffId = searchParams.get("liff_id");
 
-		if (liffId) {
-			const maximumRetryCount = 3;
-			let retriedCount = 0;
-			const retryInterval = 1500;
+    if (liffId) {
+      const maximumRetryCount = 3;
+      let retriedCount = 0;
+      const retryInterval = 1500;
 
-			const init = () => {
-				liff
-					.init({ liffId })
-					.then(() => {
-						// only send pageview when LIFF is initialized
-						// ga('send', 'pageview');
+      const init = () => {
+        liff
+          .init({ liffId })
+          .then(() => {
+            // only send pageview when LIFF is initialized
+            // ga('send', 'pageview');
 
-						// If the user is not logged in, log in.
-						// This section is dedicated for external browsers. By default, LIFF browser handles the login process internally and we don't need the code in LIFF browser.
-						// `isInClient` is a precautionary measure to ensure that the login process is not triggered in the external browsers.
-						// if (!liff.isLoggedIn() && liff.isInClient()) ...
-						if (!liff.isLoggedIn()) {
-							liff.login({
-								redirectUri: window.location.href,
-							});
-							return;
-						}
+            // If the user is not logged in, log in.
+            // This section is dedicated for external browsers. By default, LIFF browser handles the login process internally and we don't need the code in LIFF browser.
+            // `isInClient` is a precautionary measure to ensure that the login process is not triggered in the external browsers.
+            // if (!liff.isLoggedIn() && liff.isInClient()) ...
+            if (!liff.isLoggedIn()) {
+              liff.login({
+                redirectUri: window.location.href,
+              });
+              return;
+            }
 
-						liff.getProfile().then((profile) => {
-							const lineUserId = profile.userId;
+            liff.getProfile().then((profile) => {
+              const lineUserId = profile.userId;
 
-							// store LINE UID in session storage so that we can use it in the following code
-							if ("sessionStorage" in window) {
-								sessionStorage.setItem("lineUserId", lineUserId);
-							}
+              // store LINE UID in session storage so that we can use it in the following code
+              if ("sessionStorage" in window) {
+                sessionStorage.setItem("lineUserId", lineUserId);
+              }
 
-							// or set the data to the tracking code instance directly (preferred)
-						});
-					})
-					.catch((error) => {
-						// LIFF initialization might fail sometimes, retry to increase the success rate
-						if (retriedCount < maximumRetryCount) {
-							setTimeout(() => {
-								retriedCount++;
-								init();
-							}, retryInterval);
-						}
-						// maybe log the error
-					});
-			};
+              // or set the data to the tracking code instance directly (preferred)
+            });
+          })
+          .catch((error) => {
+            // LIFF initialization might fail sometimes, retry to increase the success rate
+            if (retriedCount < maximumRetryCount) {
+              setTimeout(() => {
+                retriedCount++;
+                init();
+              }, retryInterval);
+            }
+            // maybe log the error
+          });
+      };
 
-			init();
-		} else {
-			// no liffId, handle this case on demand
-		}
-	</script>
+      init();
+    } else {
+      // no liffId, handle this case on demand
+    }
+  </script>
 </body>
 
 </html>
