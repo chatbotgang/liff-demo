@@ -10,17 +10,14 @@
 
 <body>
   <script>
-    const { searchParams } = new URL(window.location.href);
-    const liffId = searchParams.get("liff_id");
-
-    if (liffId) {
+    (function initLiff() {
       const maximumRetryCount = 3;
       let retriedCount = 0;
       const retryInterval = 1500;
 
       const init = () => {
         liff
-          .init({ liffId })
+          .init({ liffId: "replace_with_your_liff_id" })
           .then(() => {
             // only send pageview when LIFF is initialized
             // ga('send', 'pageview');
@@ -60,9 +57,7 @@
       };
 
       init();
-    } else {
-      // no liffId, handle this case on demand
-    }
+    })();
   </script>
 </body>
 
