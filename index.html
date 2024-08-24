@@ -22,7 +22,7 @@
 				liff
 					.init({ liffId })
 					.then(() => {
-						// Only send pageview when LIFF is initialized
+						// only send pageview when LIFF is initialized
 						// ga('send', 'pageview');
 
 						// If the user is not logged in, log in.
@@ -39,12 +39,12 @@
 						liff.getProfile().then((profile) => {
 							const lineUserId = profile.userId;
 
-							// Store LINE UID in session storage so that we can use it in the following code
+							// store LINE UID in session storage so that we can use it in the following code
 							if ("sessionStorage" in window) {
 								sessionStorage.setItem("lineUserId", lineUserId);
 							}
 
-							// Or set the data to the tracking code instance directly (preferred)
+							// or set the data to the tracking code instance directly (preferred)
 						});
 					})
 					.catch((error) => {
