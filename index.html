@@ -6,9 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-</head>
-
-<body>
   <script>
     (function initLiff() {
       const maximumRetryCount = 3;
@@ -25,8 +22,7 @@
             // If the user is not logged in, log in.
             // This section is dedicated for external browsers. By default, LIFF browser handles the login process internally and we don't need the code in LIFF browser.
             // `isInClient` is a precautionary measure to ensure that the login process is not triggered in the external browsers.
-            // if (!liff.isLoggedIn() && liff.isInClient()) ...
-            if (!liff.isLoggedIn()) {
+            if (!liff.isLoggedIn() && liff.isInClient()) {
               liff.login({
                 redirectUri: window.location.href,
               });
@@ -36,12 +32,8 @@
             liff.getProfile().then((profile) => {
               const lineUserId = profile.userId;
 
-              // store LINE UID in session storage so that we can use it in the following code
-              if ("sessionStorage" in window) {
-                sessionStorage.setItem("lineUserId", lineUserId);
-              }
-
-              // or set the data to the tracking code instance directly (preferred)
+              // set LINE UID to the tracking code instance (Treasure Data or others) directly (preferred)
+              // TODO: add TD code
             });
           })
           .catch((error) => {
@@ -59,6 +51,9 @@
       init();
     })();
   </script>
+</head>
+
+<body>
 </body>
 
 </html>
